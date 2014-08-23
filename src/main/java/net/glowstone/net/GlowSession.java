@@ -13,6 +13,7 @@ import net.glowstone.EventFactory;
 import net.glowstone.GlowServer;
 import net.glowstone.entity.GlowPlayer;
 import net.glowstone.entity.meta.PlayerProfile;
+import net.glowstone.entity.meta.PlayerProperty;
 import net.glowstone.io.PlayerDataService;
 import net.glowstone.net.message.KickMessage;
 import net.glowstone.net.message.SetCompressionMessage;
@@ -66,7 +67,7 @@ public final class GlowSession extends BasicSession {
     /**
      * The remote address of the connection.
      */
-    private final InetSocketAddress address;
+    private InetSocketAddress address;
 
     /**
      * The verify token used in authentication
@@ -93,6 +94,20 @@ public final class GlowSession extends BasicSession {
      * a certain value the session is disconnected.
      */
     private int readTimeoutCounter = 0;
+    
+    /**
+     * The UUID of the user if connected through a BungeeCord, used to provide
+     * and online mode like UUID even if the server has to run in offline mode.
+     * Will be {@code null} if the connection isn't proxied.
+     */
+    private UUID spoofedUUID;
+    
+    /**
+     * The properties of the user if connected through a BungeeCord. These will replace
+     * the ones from the auth servers if the server has to run in offline mode.
+     * Will be {@code null} if the connection isn't proxied.
+     */
+    private List<PlayerProperty> spoofedProperties;
 
     /**
      * Similar to readTimeoutCounter but for writes.
@@ -164,6 +179,38 @@ public final class GlowSession extends BasicSession {
     public String getVerifyUsername() {
         return verifyUsername;
     }
+    
+    /**
+     * Set the spoofed UUID for this session.
+     * @param spoofedUUID The spoofed UUID
+     */
+    public void setSpoofedUUID(UUID spoofedUUID) {
+        this.spoofedUUID = spoofedUUID;
+    }
+    
+    /**
+     * Gets the spoofed UUID for this session.
+     * @return The spoofed UUID or {@code null} if there is none
+     */
+    public UUID getSpoofedUUID() {
+        return spoofedUUID;
+    }
+    
+    /**
+     * Sets the spoofed player properties for this session.
+     * @param spoofedProperties The spoofed player properties
+     */
+    public void setSpoofedProperties(List<PlayerProperty> spoofedProperties) {
+        this.spoofedProperties = spoofedProperties;
+    }
+    
+    /**
+     * Gets the spoofed player properties for this session.
+     * @return List of the spoofed player properites or {@code null} if there are none
+     */
+    public List<PlayerProperty> getSpoofedProperties() {
+        return spoofedProperties;
+    }
 
     /**
      * Sets the verify username for this session.
@@ -207,6 +254,14 @@ public final class GlowSession extends BasicSession {
     public void setPreviousPlacement(BlockPlacementMessage message) {
         previousPlacement = message;
         previousPlacementTicks = 2;
+    }
+    
+    /**
+     * Set the address of the session, used to spoof client address when connecting through a proxy server.
+     * @param address The address.
+     */
+    public void setAddress(InetSocketAddress address) {
+        this.address = address;
     }
 
     @Override
