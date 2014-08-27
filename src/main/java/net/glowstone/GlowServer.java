@@ -334,6 +334,9 @@ public final class GlowServer implements Server {
         if (!getOnlineMode()) {
             logger.log(Level.WARNING, "The server is running in offline mode! Only do this if you know what you're doing.");
         }
+        if (getProxyParsing()) {
+            logger.log(Level.INFO, "Proxy data parsing (BungeeCord compatibility) is enabled.");
+        }
 
         // Load player lists
         opsList.load();
@@ -640,6 +643,14 @@ public final class GlowServer implements Server {
      */
     public int getCompressionThreshold() {
         return config.getInt(ServerConfig.Key.COMPRESSION_THRESHOLD);
+    }
+
+    /**
+     * Get whether parsing of data provided by a proxy is enabled.
+     * @return True if a proxy is providing data to use.
+     */
+    public boolean getProxyParsing() {
+        return config.getBoolean(ServerConfig.Key.PROXY_PARSING);
     }
 
     ////////////////////////////////////////////////////////////////////////////
