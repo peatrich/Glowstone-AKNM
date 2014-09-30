@@ -692,7 +692,7 @@ public final class GlowServer implements Server {
 
     @Override
     public String getName() {
-        return "Glowstone";
+        return "Glowstone-AKNM";
     }
 
     @Override

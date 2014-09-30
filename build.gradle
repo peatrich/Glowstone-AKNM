@@ -56,7 +56,7 @@ description = "Glowstone"
 mainClassName = "net.glowstone.GlowServer"
 
 // Extended project information
-ext.url = 'https://github.com/GlowstoneMC/Glowstone'
+ext.url = 'https://github.com/GermanCoding/Glowstone-AKNM'
 ext.bukkitVersion = '1.8-R1-SNAPSHOT'
 ext.gitDescribe = getVersionName()
 
