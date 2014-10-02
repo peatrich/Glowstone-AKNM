@@ -613,26 +613,27 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
             if (bedBlock.getType() == Material.BED_BLOCK) {
                 // Check where we should spawn the player
                 Location newDest = null;
-                // Get the blocks around the bed
-                Block east = bedBlock.getRelative(BlockFace.EAST);
-                Block eastUp = east.getRelative(BlockFace.UP);
-                Block north = bedBlock.getRelative(BlockFace.NORTH);
-                Block northUp = north.getRelative(BlockFace.UP);
-                Block west = bedBlock.getRelative(BlockFace.WEST);
-                Block westUp = west.getRelative(BlockFace.UP);
-                Block south = bedBlock.getRelative(BlockFace.SOUTH);
-                Block southUp = south.getRelative(BlockFace.UP);
-                // Check where the player could stand. Sorry for the ugly if-else blocks, not very beautiful
-                if (east.getType() == Material.AIR && eastUp.getType() == Material.AIR) {
-                    newDest = east.getLocation();
-                } else if (north.getType() == Material.AIR && northUp.getType() == Material.AIR) {
-                    newDest = north.getLocation();
+                for(BlockFace face: BlockFace.values())
+                {
+                    if(face == BlockFace.UP || face == BlockFace.DOWN || face == BlockFace.SELF)
+                    {
+                        continue;
+                    }
+                    Block block = bedBlock.getRelative(face);
+                    Block blockUp = bedBlock.getRelative(BlockFace.UP);
+                    if (block.getType() == Material.AIR && blockUp.getType() == Material.AIR) {
+                        newDest = block.getLocation();
+                        break;
+                    }
                 }
-                else if(west.getType() == Material.AIR && westUp.getType() == Material.AIR) {
-                    newDest = west.getLocation();
-                }
-                else if(south.getType() == Material.AIR && southUp.getType() == Material.AIR){
-                    newDest = south.getLocation();
+                //Last check: If we do not have a bedspawn yet, try to spawn the player above the bed
+                if(newDest == null)
+                {
+                    Block block = bedBlock.getRelative(BlockFace.UP);
+                    Block blockUp = bedBlock.getRelative(BlockFace.UP);
+                    if (block.getType() == Material.AIR && blockUp.getType() == Material.AIR) {
+                        newDest = block.getLocation();
+                    }
                 }
                 //If we found a nice place, spawn the player there
                 if(newDest != null) {
