@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 public final class UpdateSignHandler implements MessageHandler<GlowSession, UpdateSignMessage> {
     @Override
@@ -17,9 +18,13 @@ public final class UpdateSignHandler implements MessageHandler<GlowSession, Upda
 
         // filter out json messages that aren't plaintext
         JSONParser parser = new JSONParser();
-        String[] lines = new String[4];
+        String[] lines = message.getMessage().clone();
         for (int i = 0; i < lines.length; ++i) {
-            lines[i] = message.getMessage()[i].asPlaintext();
+            try {
+                lines[i] = (String) parser.parse(lines[i]);
+            } catch (ClassCastException | ParseException e) {
+                lines[i] = "";
+            }
         }
 
         Location location = new Location(player.getWorld(), message.getX(), message.getY(), message.getZ());

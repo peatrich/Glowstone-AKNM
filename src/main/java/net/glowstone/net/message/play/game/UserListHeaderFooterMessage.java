@@ -1,22 +1,22 @@
 package net.glowstone.net.message.play.game;
 
 import com.flowpowered.networking.Message;
-import net.glowstone.util.TextMessage;
+import org.json.simple.JSONObject;
 
 public final class UserListHeaderFooterMessage implements Message {
 
-    private final TextMessage header, footer;
+    private final JSONObject header, footer;
 
-    public UserListHeaderFooterMessage(TextMessage header, TextMessage footer) {
+    public UserListHeaderFooterMessage(JSONObject header, JSONObject footer) {
         this.header = header;
         this.footer = footer;
     }
 
-    public TextMessage getHeader() {
+    public JSONObject getHeader() {
         return header;
     }
 
-    public TextMessage getFooter() {
+    public JSONObject getFooter() {
         return footer;
     }
 

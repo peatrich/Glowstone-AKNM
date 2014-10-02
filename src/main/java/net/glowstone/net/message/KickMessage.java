@@ -1,26 +1,15 @@
 package net.glowstone.net.message;
 
-import com.flowpowered.networking.Message;
-import net.glowstone.util.TextMessage;
+import org.json.simple.JSONObject;
 
-public final class KickMessage implements Message {
+public final class KickMessage extends JsonMessage {
 
-    private final TextMessage text;
-
-    public KickMessage(TextMessage text) {
-        this.text = text;
+    public KickMessage(JSONObject json) {
+        super(json);
     }
 
     public KickMessage(String text) {
-        this.text = new TextMessage(text);
+        super(toTextJson(text));
     }
 
-    public TextMessage getText() {
-        return text;
-    }
-
-    @Override
-    public String toString() {
-        return "KickMessage" + text.encode();
-    }
 }

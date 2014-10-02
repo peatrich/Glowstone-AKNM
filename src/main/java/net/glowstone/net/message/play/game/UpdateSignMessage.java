@@ -1,16 +1,16 @@
 package net.glowstone.net.message.play.game;
 
 import com.flowpowered.networking.Message;
-import net.glowstone.util.TextMessage;
+import net.glowstone.net.message.JsonMessage;
 
 import java.util.Arrays;
 
 public final class UpdateSignMessage implements Message {
 
     private final int x, y, z;
-    private final TextMessage[] message;
+    private final String[] message;
 
-    public UpdateSignMessage(int x, int y, int z, TextMessage[] message) {
+    public UpdateSignMessage(int x, int y, int z, String[] message) {
         if (message.length != 4) {
             throw new IllegalArgumentException();
         }
@@ -26,9 +26,9 @@ public final class UpdateSignMessage implements Message {
             throw new IllegalArgumentException();
         }
 
-        TextMessage[] encoded = new TextMessage[4];
+        String[] encoded = new String[4];
         for (int i = 0; i < 4; ++i) {
-            encoded[i] = new TextMessage(message[i]);
+            encoded[i] = JsonMessage.toTextJson(message[i]).toJSONString();
         }
         return new UpdateSignMessage(x, y, z, encoded);
     }
@@ -45,7 +45,7 @@ public final class UpdateSignMessage implements Message {
         return z;
     }
 
-    public TextMessage[] getMessage() {
+    public String[] getMessage() {
         return message;
     }
 
