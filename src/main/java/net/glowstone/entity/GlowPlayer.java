@@ -54,6 +54,7 @@ import java.util.logging.Level;
 
 /**
  * Represents an in-game player.
+ *
  * @author Graham Edgecombe
  */
 @DelegateDeserialization(GlowOfflinePlayer.class)
@@ -242,9 +243,10 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
 
     /**
      * Creates a new player and adds it to the world.
+     *
      * @param session The player's session.
      * @param profile The player's profile with name and UUID information.
-     * @param reader The PlayerReader to be used to initialize the player.
+     * @param reader  The PlayerReader to be used to initialize the player.
      */
     public GlowPlayer(GlowSession session, PlayerProfile profile, PlayerDataService.PlayerReader reader) {
         super(initLocation(session, reader), profile);
@@ -309,8 +311,9 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
     /**
      * Read the location from a PlayerReader for entity initialization. Will
      * fall back to a reasonable default rather than returning null.
+     *
      * @param session The player's session.
-     * @param reader The PlayerReader to get the location from.
+     * @param reader  The PlayerReader to get the location from.
      * @return The location to spawn the player.
      */
     private static Location initLocation(GlowSession session, PlayerDataService.PlayerReader reader) {
@@ -333,6 +336,7 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
 
     /**
      * Get the network session attached to this player.
+     *
      * @return The GlowSession of the player.
      */
     public GlowSession getSession() {
@@ -341,6 +345,7 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
 
     /**
      * Get the join time in milliseconds, to be saved as last played time.
+     *
      * @return The player's join time.
      */
     public long getJoinTime() {
@@ -568,6 +573,7 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
     /**
      * Spawn the player at the given location after they have already joined.
      * Used for changing worlds and respawning after death.
+     *
      * @param location The location to place the player.
      */
     private void spawnAt(Location location) {
@@ -613,10 +619,8 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
             if (bedBlock.getType() == Material.BED_BLOCK) {
                 // Check where we should spawn the player
                 Location newDest = null;
-                for(BlockFace face: BlockFace.values())
-                {
-                    if(face == BlockFace.UP || face == BlockFace.DOWN || face == BlockFace.SELF)
-                    {
+                for (BlockFace face : BlockFace.values()) {
+                    if (face == BlockFace.UP || face == BlockFace.DOWN || face == BlockFace.SELF) {
                         continue;
                     }
                     Block block = bedBlock.getRelative(face);
@@ -627,8 +631,7 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
                     }
                 }
                 //Last check: If we do not have a bedspawn yet, try to spawn the player above the bed
-                if(newDest == null)
-                {
+                if (newDest == null) {
                     Block block = bedBlock.getRelative(BlockFace.UP);
                     Block blockUp = bedBlock.getRelative(BlockFace.UP);
                     if (block.getType() == Material.AIR && blockUp.getType() == Material.AIR) {
@@ -636,7 +639,7 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
                     }
                 }
                 //If we found a nice place, spawn the player there
-                if(newDest != null) {
+                if (newDest != null) {
                     dest = newDest;
                     spawnAtBed = true;
                 }
@@ -651,6 +654,7 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
 
     /**
      * Checks whether the player can see the given chunk.
+     *
      * @return If the chunk is known to the player's client.
      */
     public boolean canSee(GlowChunk.Key chunk) {
@@ -659,6 +663,7 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
 
     /**
      * Checks whether the player can see the given entity.
+     *
      * @return If the entity is known to the player's client.
      */
     public boolean canSee(GlowEntity entity) {
@@ -667,6 +672,7 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
 
     /**
      * Open the sign editor interface at the specified location.
+     *
      * @param loc The location to open the editor at
      */
     public void openSignEditor(Location loc) {
@@ -680,6 +686,7 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
     /**
      * Check that the specified location matches that of the last opened sign
      * editor, and if so, clears the last opened sign editor.
+     *
      * @param loc The location to check
      * @return Whether the location matched.
      */
@@ -694,6 +701,7 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
 
     /**
      * Get a UserListItemMessage entry representing adding this player.
+     *
      * @return The entry (action ADD_PLAYER) with this player's information.
      */
     public UserListItemMessage.Entry getUserListEntry() {
@@ -716,6 +724,7 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
 
     /**
      * Set the client settings for this player.
+     *
      * @param settings The new client settings.
      */
     public void setSettings(ClientSettings settings) {
@@ -725,6 +734,7 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
 
     /**
      * Get this player's client settings.
+     *
      * @return The player's client settings.
      */
     public ClientSettings getSettings() {
@@ -1149,6 +1159,7 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
 
     /**
      * Teleport the player.
+     *
      * @param location The destination to teleport to.
      * @return Whether the teleport was a success.
      */
@@ -1217,7 +1228,8 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
 
     /**
      * Says a message (or runs a command).
-     * @param text message sent by the player.
+     *
+     * @param text  message sent by the player.
      * @param async whether the message was received asynchronously.
      */
     public void chat(final String text, boolean async) {
@@ -1687,6 +1699,7 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
 
     /**
      * Add a listening channel to this player.
+     *
      * @param channel The channel to add.
      */
     public void addChannel(String channel) {
@@ -1697,6 +1710,7 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
 
     /**
      * Remove a listening channel from this player.
+     *
      * @param channel The channel to remove.
      */
     public void removeChannel(String channel) {
