@@ -12,7 +12,7 @@ public class ShutdownMonitorThread extends Thread {
     /**
      * The delay in milliseconds until leftover threads are killed.
      */
-    private static final int DELAY = 8000;
+    private static final int DELAY = 3000;
 
     public ShutdownMonitorThread() {
         setName("ShutdownMonitorThread");
@@ -41,14 +41,20 @@ public class ShutdownMonitorThread extends Thread {
             }
 
             GlowServer.logger.warning("Rogue thread: " + thread);
+            /*
+            Do not spam a stracktrace for now, until Essentials is fixed
+            TODO: Re-add as debug function
             for (StackTraceElement trace : stack) {
                 GlowServer.logger.warning("\tat " + trace);
             }
+            */
 
             // really get it out of there
             thread.interrupt();
-            thread.stop();
+            //thread.stop();
         }
+        //Let's kill it
+        System.exit(0);
     }
 
 }
