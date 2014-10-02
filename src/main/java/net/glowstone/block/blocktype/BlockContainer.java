@@ -29,7 +29,7 @@ public class BlockContainer extends BlockType {
 
     @Override
     public Collection<ItemStack> getDrops(GlowBlock block) {
-        LinkedList<ItemStack> list = new LinkedList<>();
+        LinkedList<ItemStack> list = new LinkedList<ItemStack>();
 
         list.add(new ItemStack(block.getType(), 1));
 
