@@ -3,6 +3,7 @@ package net.glowstone.inventory;
 import net.glowstone.entity.GlowHumanEntity;
 import net.glowstone.entity.GlowPlayer;
 import net.glowstone.net.message.play.inv.HeldItemMessage;
+import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.EntityEquipment;
@@ -129,10 +130,16 @@ public class GlowPlayerInventory extends GlowInventory implements PlayerInventor
 
     @Override
     public void setArmorContents(ItemStack[] items) {
+        if(items == null)
+        {
+            items = new ItemStack[4];
+        }
         if (items.length != 4) {
             throw new IllegalArgumentException("Length of armor must be 4");
         }
         for (int i = 0; i < 4; ++i) {
+            if(items[i] == null)
+                items[i] = new ItemStack(Material.AIR);
             setItem(SIZE + i, items[i]);
         }
     }
