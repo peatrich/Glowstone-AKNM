@@ -242,6 +242,11 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
     private float walkSpeed = 0.2f;
 
     /**
+     * Whether the player is in dead state.
+     */
+    private boolean deadState;
+
+    /**
      * Creates a new player and adds it to the world.
      *
      * @param session The player's session.
@@ -608,8 +613,10 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
      * Respawn the player after they have died.
      */
     public void respawn() {
+        deadState = false;
         // restore health
         setHealth(getMaxHealth());
+        setSaturation(20f);
 
         // determine spawn destination
         boolean spawnAtBed = false;
@@ -1151,6 +1158,17 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
 
     private void sendHealth() {
         float finalHealth = (float) (getHealth() / getMaxHealth() * getHealthScale());
+        if(finalHealth <= 0 && !deadState)
+        {
+            //Player is dead
+            deadState = true;
+            this.active = false;
+            this.getInventory().clear();
+            this.getInventory().setArmorContents(null);
+            this.updateInventory();
+            this.setExp(0);
+            // TODO: Drop the items
+        }
         session.send(new HealthMessage(finalHealth, getFoodLevel(), getSaturation()));
     }
 
@@ -1514,10 +1532,12 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
 
     @Override
     public void updateInventory() {
+        if(invMonitor != null)
         session.send(new SetWindowContentsMessage(invMonitor.getId(), invMonitor.getContents()));
     }
 
     public void sendItemChange(int slot, ItemStack item) {
+        if(item == null) item = new ItemStack(Material.AIR);
         session.send(new SetWindowSlotMessage(invMonitor.getId(), slot, item));
     }
 
