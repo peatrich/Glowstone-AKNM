@@ -130,6 +130,17 @@ public enum MetadataIndex {
         return appliesTo.isAssignableFrom(clazz);
     }
 
+    public static MetadataIndex getIndex(int index, MetadataType type) {
+        MetadataIndex output = null;
+        for (MetadataIndex entry : values()) {
+            if (entry.getIndex() == index && entry.getType().equals(type)) {
+                output = entry;
+                break;
+            }
+        }
+        return output;
+    }
+
     public static interface StatusFlags {
         final int ON_FIRE = 0x01;
         final int SNEAKING = 0x02;
