@@ -1,10 +1,12 @@
 package net.glowstone.entity;
 
+import net.glowstone.EventFactory;
 import net.glowstone.constants.GlowPotionEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -325,9 +327,21 @@ public abstract class GlowLivingEntity extends GlowEntity implements LivingEntit
 
     @Override
     public void damage(double amount, Entity source) {
+       damage(amount, source, EntityDamageEvent.DamageCause.CUSTOM);
+    }
+
+
+    public void damage(double amount, Entity source, EntityDamageEvent.DamageCause cause)
+    {
         // todo: handle noDamageTicks
-        lastDamage = amount;
-        health -= amount;
+        EntityDamageEvent damageEvent = new EntityDamageEvent(this, cause, amount);
+        damageEvent = EventFactory.callEvent(damageEvent);
+        if(damageEvent.isCancelled())
+            return;
+        if(damageEvent.getFinalDamage() <= 0)
+            return;
+        setLastDamage(damageEvent.getFinalDamage());
+        setHealth(getHealth() - amount);
         // todo: death, events, so on
     }
 

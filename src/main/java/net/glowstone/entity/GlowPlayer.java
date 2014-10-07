@@ -1163,11 +1163,21 @@ public final class GlowPlayer extends GlowHumanEntity implements Player {
             //Player is dead
             deadState = true;
             this.active = false;
+            for(ItemStack i: this.getInventory().getContents())
+            {
+                if(i != null)
+                getWorld().dropItem(getLocation(), i);
+            }
             this.getInventory().clear();
+            for(ItemStack i: this.getInventory().getArmorContents())
+            {
+                if(i != null)
+                    getWorld().dropItem(getLocation(), i);
+            }
             this.getInventory().setArmorContents(null);
             this.updateInventory();
             this.setExp(0);
-            // TODO: Drop the items
+            // TODO: Drop exp
             // Exp: Drop 0.2 levels per player level, but never more than 6 levels. Example: if player is level 25 then 25 * 02 = 5 levels to drop. Note: The drops are also a bit random, the exact experience points vary in size.
         }
         session.send(new HealthMessage(finalHealth, getFoodLevel(), getSaturation()));
